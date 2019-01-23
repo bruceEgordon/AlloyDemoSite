@@ -4,6 +4,9 @@ using EPiServer;
 using EPiServer.Framework.DataAnnotations;
 using AlloyDemoSite.Models.Pages;
 using AlloyDemoSite.Models.ViewModels;
+using System.Linq;
+using AlloyDemoSite.Business;
+using System.Web;
 
 namespace AlloyDemoSite.Controllers
 {
@@ -36,5 +39,26 @@ namespace AlloyDemoSite.Controllers
             var type = typeof(PageViewModel<>).MakeGenericType(page.GetOriginalType());
             return Activator.CreateInstance(type, page) as IPageViewModel<SitePageData>;
         }
+
+        //Security checklist SSL demo
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            var requireHttps = filterContext.ActionParameters.Keys.Select(key => filterContext.ActionParameters[key])
+                .OfType<ISecurityProperties>()
+                .Where(x => x.RequiresHttps == true).FirstOrDefault();
+
+            if (requireHttps != null && requireHttps.RequiresHttps)
+            {
+                if(filterContext.HttpContext.Request != null && !filterContext.HttpContext.Request.IsSecureConnection)
+                {
+                    var req = filterContext.HttpContext.Request;
+                    
+                    filterContext.Result = new RedirectResult($"https://{req.Url.Host}:44305{req.RawUrl}");
+                }
+            }
+
+            base.OnActionExecuting(filterContext);
+        }
+
     }
 }

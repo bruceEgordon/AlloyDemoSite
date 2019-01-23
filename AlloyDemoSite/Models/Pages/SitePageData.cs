@@ -5,13 +5,14 @@ using EPiServer.DataAnnotations;
 using AlloyDemoSite.Business.Rendering;
 using AlloyDemoSite.Models.Properties;
 using EPiServer.Web;
+using AlloyDemoSite.Business;
 
 namespace AlloyDemoSite.Models.Pages
 {
     /// <summary>
     /// Base class for all page types
     /// </summary>
-    public abstract class SitePageData : PageData, ICustomCssInContentArea
+    public abstract class SitePageData : PageData, ICustomCssInContentArea, ISecurityProperties
     {
         [Display(
             GroupName = Global.GroupNames.MetaData,
@@ -92,5 +93,11 @@ namespace AlloyDemoSite.Models.Pages
         {
             get { return "teaserblock"; } //Page partials should be style like teasers
         }
+
+        [Display(
+            GroupName = SystemTabNames.Settings,
+            Order = 400)]
+        [CultureSpecific]
+        public virtual bool RequiresHttps { get; set; }
     }
 }
