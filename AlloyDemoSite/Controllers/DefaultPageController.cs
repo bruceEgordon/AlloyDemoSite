@@ -43,21 +43,21 @@ namespace AlloyDemoSite.Controllers
         //Security checklist SSL demo
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var requireHttps = filterContext.ActionParameters.Keys.Select(key => filterContext.ActionParameters[key])
-                .OfType<ISecurityProperties>()
-                .Where(x => x.RequiresHttps == true).FirstOrDefault();
+            //var requireHttps = filterContext.ActionParameters.Keys.Select(key => filterContext.ActionParameters[key])
+            //    .OfType<ISecurityProperties>()
+            //    .Where(x => x.RequiresHttps == true).FirstOrDefault();
 
-            if (requireHttps != null && requireHttps.RequiresHttps)
-            {
-                if(filterContext.HttpContext.Request != null && !filterContext.HttpContext.Request.IsSecureConnection)
-                {
-                    var req = filterContext.HttpContext.Request;
+            //if (requireHttps != null && requireHttps.RequiresHttps)
+            //{
+            //    if(filterContext.HttpContext.Request != null && !filterContext.HttpContext.Request.IsSecureConnection)
+            //    {
+            //        var req = filterContext.HttpContext.Request;
                     
-                    filterContext.Result = new RedirectResult($"https://{req.Url.Host}:44305{req.RawUrl}");
-                }
-            }
+            //        filterContext.Result = new RedirectResult($"https://{req.Url.Host}:44305{req.RawUrl}");
+            //    }
+            //}
 
-            base.OnActionExecuting(filterContext);
+            //base.OnActionExecuting(filterContext);
         }
 
     }
